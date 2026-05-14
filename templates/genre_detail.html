@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}{{ genre.name }} - Cineflix{% endblock %}
+
+{% block content %}
+  <p><a href="{{ url_for('movie_list') }}">Back to all movies</a></p>
+  <h1>{{ genre.name }}</h1>
+  {% if genre.description %}
+    <p>{{ genre.description }}</p>
+  {% endif %}
+
+  <div class="stats-grid">
+    <div class="stat">
+      <strong>{{ stats.count }}</strong>
+      <span>movies in this genre</span>
+    </div>
+    <div class="stat">
+      <strong>{{ "%.1f"|format(stats.average_rating) }}</strong>
+      <span>average rating</span>
+    </div>
+    <div class="stat">
+      <strong>{{ "%.0f"|format(stats.average_runtime) }}</strong>
+      <span>average runtime in minutes</span>
+    </div>
+  </div>
+
+  <p class="meta">Page {{ pagination.page }} of {{ pagination.num_pages }}.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Director</th>
+        <th>Year</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for movie in movies %}
+        <tr>
+          <td><a href="{{ url_for('movie_detail', movie_id=movie.id) }}">{{ movie.title }}</a></td>
+          <td>{{ movie.director or '-' }}</td>
+          <td>{{ movie.year }}</td>
+          <td><span class="star">*</span> {{ movie.rating }}</td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="4">No movies in this genre.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    {% if pagination.has_prev %}
+      <a href="{{ url_for('genre_detail', genre_code=genre.code, page=pagination.prev_page) }}">Previous</a>
+    {% endif %}
+    <span>Page {{ pagination.page }} of {{ pagination.num_pages }}</span>
+    {% if pagination.has_next %}
+      <a href="{{ url_for('genre_detail', genre_code=genre.code, page=pagination.next_page) }}">Next</a>
+    {% endif %}
+  </div>
+{% endblock %}

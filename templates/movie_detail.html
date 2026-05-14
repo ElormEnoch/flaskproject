@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}{{ movie.title }} - Cineflix{% endblock %}
+
+{% block content %}
+  <p><a href="{{ url_for('movie_list') }}">Back to all movies</a></p>
+  <h1>{{ movie.title }}</h1>
+
+  <p>
+    <a href="{{ url_for('genre_detail', genre_code=movie.genre.code) }}" class="badge">{{ movie.genre.name }}</a>
+    <span class="badge">{{ movie.year }}</span>
+    <span class="badge"><span class="star">*</span> {{ movie.rating }}</span>
+    {% if movie.runtime_minutes %}
+      <span class="badge">{{ movie.runtime_minutes }} min</span>
+    {% endif %}
+  </p>
+
+  {% if current_user() %}
+    <p class="fav-btn">
+      <form method="post" action="{{ url_for('toggle_favourite', movie_id=movie.id) }}" class="inline">
+        {% if is_favourite %}
+          <button type="submit">* Remove from favourites</button>
+        {% else %}
+          <button type="submit">Add to favourites</button>
+        {% endif %}
+      </form>
+    </p>
+  {% else %}
+    <p class="meta"><a href="{{ url_for('login') }}">Log in</a> to save this film to your favourites.</p>
+  {% endif %}
+
+  <dl>
+    <dt>Director</dt>
+    <dd>{{ movie.director or 'Not listed' }}</dd>
+
+    <dt>Genre</dt>
+    <dd>
+      <a href="{{ url_for('genre_detail', genre_code=movie.genre.code) }}">{{ movie.genre.name }}</a>
+      {% if movie.genre.description %} - {{ movie.genre.description }}{% endif %}
+    </dd>
+
+    <dt>Year</dt>
+    <dd>{{ movie.year }}</dd>
+
+    <dt>Rating</dt>
+    <dd><span class="star">*</span> {{ movie.rating }} / 10</dd>
+
+    <dt>Runtime</dt>
+    <dd>{% if movie.runtime_minutes %}{{ movie.runtime_minutes }} minutes{% else %}Not listed{% endif %}</dd>
+
+    <dt>Description</dt>
+    <dd>{{ movie.description or 'No description available.' }}</dd>
+
+    <dt>Dataset ID</dt>
+    <dd>{{ movie.source_code }}</dd>
+  </dl>
+
+  <h2>Dataset context</h2>
+  <div class="stats-grid">
+    <div class="stat">
+      <strong>{{ genre_count }}</strong>
+      <span>{{ movie.genre.name }} movies in this dataset</span>
+    </div>
+    <div class="stat">
+      <strong>{{ "%.1f"|format(genre_average) }}</strong>
+      <span>average {{ movie.genre.name }} rating</span>
+    </div>
+    <div class="stat">
+      <strong>{{ higher_rated_count }}</strong>
+      <span>movies rated higher out of {{ total_movies }}</span>
+    </div>
+  </div>
+
+  <h2>High-rated films in the same genre</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Year</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for similar in similar_movies %}
+        <tr>
+          <td><a href="{{ url_for('movie_detail', movie_id=similar.id) }}">{{ similar.title }}</a></td>
+          <td>{{ similar.year }}</td>
+          <td><span class="star">*</span> {{ similar.rating }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

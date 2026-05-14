@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}My Favourites - Cineflix{% endblock %}
+
+{% block content %}
+  <h1>My Favourites</h1>
+  <p class="meta">Films you have saved in the database.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Genre</th>
+        <th>Year</th>
+        <th>Rating</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for movie in favourites %}
+        <tr>
+          <td><a href="{{ url_for('movie_detail', movie_id=movie.id) }}">{{ movie.title }}</a></td>
+          <td><a href="{{ url_for('genre_detail', genre_code=movie.genre.code) }}">{{ movie.genre.name }}</a></td>
+          <td>{{ movie.year }}</td>
+          <td><span class="star">*</span> {{ movie.rating }}</td>
+          <td>
+            <form method="post" action="{{ url_for('toggle_favourite', movie_id=movie.id) }}" class="inline">
+              <button type="submit" class="btn-danger">Remove</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="5">
+            You have not saved any favourites yet.
+            <a href="{{ url_for('movie_list') }}">Browse movies</a> to get started.
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

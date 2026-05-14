@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Cineflix - All Movies{% endblock %}
+
+{% block content %}
+  <h1>Movies</h1>
+
+  <form method="get" action="{{ url_for('movie_list') }}">
+    <div class="search-row">
+      <div>
+        <label for="search">Search title or director</label>
+        <input id="search" name="search" type="text" value="{{ search_query }}" placeholder="e.g. Inception or Nolan">
+      </div>
+      <div>
+        <label for="genre">Genre</label>
+        <select id="genre" name="genre">
+          <option value="">All genres</option>
+          {% for g in genres %}
+            <option value="{{ g.code }}" {% if g.code == genre_filter %}selected{% endif %}>
+              {{ g.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label>&nbsp;</label>
+        <button type="submit" class="btn">Search</button>
+        {% if search_query or genre_filter %}
+          <a href="{{ url_for('movie_list') }}" class="btn btn-outline">Clear</a>
+        {% endif %}
+      </div>
+    </div>
+  </form>
+
+  <p class="meta">
+    Page {{ pagination.page }} of {{ pagination.num_pages }} -
+    {{ pagination.total }} movie{{ 's' if pagination.total != 1 }} found.
+    {% if search_query %}Search: "{{ search_query }}".{% endif %}
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Genre</th>
+        <th>Director</th>
+        <th>Year</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for movie in movies %}
+        <tr>
+          <td><a href="{{ url_for('movie_detail', movie_id=movie.id) }}">{{ movie.title }}</a></td>
+          <td><a href="{{ url_for('genre_detail', genre_code=movie.genre.code) }}">{{ movie.genre.name }}</a></td>
+          <td>{{ movie.director or '-' }}</td>
+          <td>{{ movie.year }}</td>
+          <td><span class="star">*</span> {{ movie.rating }}</td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="5">No movies found matching your search.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="pagination">
+    {% if pagination.has_prev %}
+      <a href="{{ url_for('movie_list', page=pagination.prev_page, search=search_query, genre=genre_filter) }}">Previous</a>
+    {% endif %}
+    <span>Page {{ pagination.page }} of {{ pagination.num_pages }}</span>
+    {% if pagination.has_next %}
+      <a href="{{ url_for('movie_list', page=pagination.next_page, search=search_query, genre=genre_filter) }}">Next</a>
+    {% endif %}
+  </div>
+{% endblock %}

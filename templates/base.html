@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Cineflix{% endblock %}</title>
+  <style>
+    :root {
+      --bg: #f7f7f4;
+      --surface: #ffffff;
+      --border: #d8d9d2;
+      --text: #24251f;
+      --text-muted: #686b60;
+      --gold: #b68a16;
+      --gold-light: #efe1b7;
+      --gold-dark: #7f6417;
+      --link: #2f6f73;
+      --link-hover: #194a4d;
+      --btn-bg: #2f6f73;
+      --btn-fg: #ffffff;
+      --btn-hover: #194a4d;
+      --header-bg: #24251f;
+      --header-fg: #efe1b7;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header { background: var(--header-bg); padding: .75rem 2rem; }
+
+    nav {
+      max-width: 62rem;
+      margin: 0 auto;
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    nav .site-title { font-size: 1.3rem; font-weight: bold; margin-right: auto; }
+    nav .site-title a { color: var(--header-fg); text-decoration: none; }
+    nav .site-title a::before { content: "* "; color: var(--gold); }
+    nav a { color: #d4b86a; text-decoration: none; font-size: .92rem; }
+    nav a:hover { color: var(--gold-light); text-decoration: underline; }
+
+    .logout-form { display: inline; margin: 0; }
+    .logout-form button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #d4b86a;
+      font-family: Georgia, serif;
+      font-size: .92rem;
+      padding: 0;
+    }
+    .logout-form button:hover { color: var(--gold-light); text-decoration: underline; }
+
+    main {
+      max-width: 62rem;
+      margin: 2rem auto;
+      background: var(--surface);
+      padding: 2rem 2.5rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(36, 37, 31, .07);
+    }
+
+    h1 { color: var(--text); border-bottom: 2px solid var(--gold); padding-bottom: .4rem; margin-top: 0; }
+    h2 { color: var(--text); margin-top: 1.6rem; }
+
+    a { color: var(--link); text-decoration: none; }
+    a:hover { color: var(--link-hover); text-decoration: underline; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: .5rem; }
+    th, td { border-bottom: 1px solid var(--border); padding: .7rem .9rem; text-align: left; }
+    th { background: var(--gold-light); color: var(--gold-dark); font-size: .85rem; text-transform: uppercase; }
+    tr:hover td { background: #fbfbf8; }
+
+    .star { color: var(--gold); }
+
+    .badge {
+      display: inline-block;
+      padding: .15rem .55rem;
+      background: var(--gold-light);
+      border: 1px solid #d4b86a;
+      font-size: .8rem;
+      color: var(--gold-dark);
+      border-radius: 2px;
+    }
+
+    .meta { margin: .75rem 0; color: var(--text-muted); font-size: .88rem; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+      gap: .75rem;
+      margin: 1rem 0 1.25rem;
+    }
+
+    .stat {
+      border: 1px solid var(--border);
+      background: #fbfbf8;
+      padding: .8rem;
+      border-radius: 4px;
+    }
+
+    .stat strong { display: block; font-size: 1.25rem; }
+    .stat span { color: var(--text-muted); font-size: .82rem; }
+
+    .pagination {
+      margin-top: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      font-size: .88rem;
+      color: var(--text-muted);
+    }
+    .pagination a { padding: .3rem .8rem; border: 1px solid var(--gold); color: var(--gold-dark); border-radius: 2px; }
+    .pagination a:hover { background: var(--gold-light); text-decoration: none; }
+
+    .btn {
+      display: inline-block;
+      padding: .4rem 1.1rem;
+      background: var(--btn-bg);
+      color: var(--btn-fg);
+      border: none;
+      cursor: pointer;
+      font-family: Georgia, serif;
+      font-size: .9rem;
+      border-radius: 2px;
+      text-decoration: none;
+    }
+    .btn:hover { background: var(--btn-hover); color: #fff; text-decoration: none; }
+    .btn-outline { background: transparent; color: var(--link); border: 1px solid var(--link); }
+    .btn-outline:hover { background: #e8f1f1; color: var(--link-hover); }
+
+    .btn-danger {
+      background: transparent;
+      color: #8c3d1f;
+      border: none;
+      cursor: pointer;
+      font-family: Georgia, serif;
+      font-size: .9rem;
+      padding: 0;
+      text-decoration: underline;
+    }
+    .btn-danger:hover { color: #c0392b; }
+
+    .messages { list-style: none; padding: 0; margin: 0 0 1.2rem; }
+    .messages li {
+      padding: .6rem 1rem;
+      background: #fffbea;
+      border-left: 3px solid var(--gold);
+      margin-bottom: .5rem;
+      font-size: .9rem;
+      color: var(--gold-dark);
+    }
+
+    .search-row { display: flex; gap: .75rem; flex-wrap: wrap; align-items: flex-end; margin-bottom: 1.2rem; }
+    .search-row label { display: block; font-size: .82rem; margin-bottom: .2rem; color: var(--text-muted); }
+
+    input[type="text"], input[type="password"], select {
+      font-family: Georgia, serif;
+      padding: .4rem .65rem;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: .9rem;
+      border-radius: 2px;
+    }
+    input[type="text"]:focus, input[type="password"]:focus, select:focus { border-color: var(--link); outline: none; }
+
+    dt { font-weight: bold; margin-top: 1rem; color: var(--text-muted); font-size: .82rem; text-transform: uppercase; }
+    dd { margin: .2rem 0 .5rem; }
+
+    .fav-btn form button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--link);
+      font-family: Georgia, serif;
+      font-size: .9rem;
+      padding: 0;
+      text-decoration: underline;
+    }
+    .fav-btn form button:hover { color: var(--link-hover); }
+
+    form.inline { display: inline; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; margin-bottom: .3rem; font-size: .9rem; color: var(--text-muted); }
+    .form-group input { width: 20rem; max-width: 100%; }
+    .error-msg { color: #8c3d1f; font-size: .88rem; margin-bottom: .8rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <span class="site-title"><a href="{{ url_for('movie_list') }}">Cineflix</a></span>
+      <a href="{{ url_for('movie_list') }}">All Movies</a>
+      {% if current_user() %}
+        <a href="{{ url_for('favourites_list') }}">My Favourites</a>
+        <form action="{{ url_for('logout') }}" method="post" class="logout-form">
+          <button type="submit">Log out ({{ current_user() }})</button>
+        </form>
+      {% else %}
+        <a href="{{ url_for('login') }}">Log in</a>
+        <a href="{{ url_for('register') }}">Register</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class="messages">
+          {% for msg in messages %}
+            <li>{{ msg }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
