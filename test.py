@@ -3,7 +3,7 @@ import pytest
 from app import create_app
 from extensions import db
 from models import Genre, Movie, User
-from data_loader import load_open_data
+from load_data import load_open_data
 
 
 @pytest.fixture()
