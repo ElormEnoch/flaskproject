@@ -4,7 +4,7 @@
 This is a Flask web application for browsing and exploring movies and genres. It uses server-side rendering with Jinja2 templates and stores movie data in a local SQLite database.
 
 ## 2. Project Scope and Purpose
-The app provides a clean interface to list movies, view movie details, explore genres, and manage favorites. It is designed for learning Flask, SQLAlchemy, and basic web application patterns.
+The app provides a clean interface to list movies, view movie details, explore genres, and manage favorites. It is designed using Flask, SQLAlchemy, and basic web application patterns.
 
 ## 3. Document and README Responsibilities
 This README explains how to install, run, and maintain the project. It also documents the app structure, dependencies, and deployment guidelines.
@@ -25,8 +25,8 @@ This README explains how to install, run, and maintain the project. It also docu
 
 ## 6. Installation Instructions
 1. Clone the repository(git clone https://github.com/ElormEnoch/flaskproject.git)
-2. Create and activate a Python virtual environment(python -m venv .venv) and (.\.venv\Scripts\activate) for Windows 
-
+2. Create and activate a Python virtual environment - `python -m venv .venv` and `.\.venv\Scripts\activate` for Windows 
+`python3 -m venv .venv` and `source .venv/bin/activate` for MacOS
 3. Install dependencies with:
    ```bash
    pip install -r requirements.txt
@@ -42,7 +42,8 @@ Then open:
 
 `http://127.0.0.1:5000`
 
-Render url: 
+Render url: https://flaskproject-wvqf.onrender.com/movies/
+
 
 ## 8. Maintenance Details
 - Update `requirements.txt` when dependencies change.
@@ -61,6 +62,3 @@ Render url:
 
 ## 10. Future Improvements
 - Add user authentication and login support.
-- Add search and filtering on the movie list.
-- Add pagination for long movie lists.
-- Add API endpoints for external access.
